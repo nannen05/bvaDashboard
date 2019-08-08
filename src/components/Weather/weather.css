@@ -1,0 +1,16 @@
+.weather {
+    padding: 30px;
+    width: 66.6667%
+}
+.weather-card {
+    display: flex;
+}
+
+.weather-card__column {
+    width: 50%;
+}
+
+.weather-card__header {
+    text-align: center;
+}
+

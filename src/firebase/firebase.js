@@ -18,13 +18,13 @@ const config = {
     messagingSenderId: MESSAGING_SENDER_ID
 };
 
-const FIREBASE_APP = firebase.initializeApp(config);
+// const FIREBASE_APP = firebase.initializeApp(config);
 
-const db = FIREBASE_APP.database()
+// const db = FIREBASE_APP.database()
 
-const auth = FIREBASE_APP.auth();
+// const auth = FIREBASE_APP.auth();
 
-export {
-  db,
-  auth,
-};
+// export {
+//   db,
+//   auth,
+// };

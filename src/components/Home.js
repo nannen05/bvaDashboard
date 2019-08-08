@@ -4,35 +4,27 @@ import logo from '../logo.svg';
 import '../App.css';
 import * as actions from "../store/actions";
 import { withRouter } from 'react-router-dom'
-import { firebase } from '../firebase';
 
-import Navigation from './Navigation'
+import Weather from './Weather/Weather'
 
 class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      authUser: null,
+      
     };
   }
 
   componentDidMount() {
-    firebase.auth.onAuthStateChanged(authUser => {
-      authUser
-        ? this.setState({ authUser })
-        : this.setState({ authUser: null });
-    });
   }
 
   render() {
     return (
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome</h2>
+      <div className="App grid">
+        <div className="">
+          <Weather/>
         </div>
-        <Navigation authUser={this.state.authUser} />
       </div>
     );
   }

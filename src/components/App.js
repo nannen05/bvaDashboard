@@ -1,15 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux";
 import { Route, BrowserRouter, Link, Redirect, Switch, withRouter } from 'react-router-dom'
-import { firebase, auth } from '../firebase';
+//import { firebase, auth } from '../firebase';
 import * as actions from "../store/actions";
 
 import Home from "./Home";
-import Login from "./Login";
-import ColorChange from "./ColorChange";
-import Card from "./Card";
-import Register from "./Register";
-import Dashboard from "./Dashboard";
 
 
 function PrivateRoute ({component: Component, authed, ...rest}) {
@@ -50,22 +45,22 @@ class App extends Component {
   }
 
   componentDidMount () {
-    firebase.auth.onAuthStateChanged((user) => {
-      if (user) {
-        this.props.fetchUser(user.uid)
+    // firebase.auth.onAuthStateChanged((user) => {
+    //   if (user) {
+    //     this.props.fetchUser(user.uid)
 
-        this.setState({
-          authed: true,
-          loading: false,
-        })
+    //     this.setState({
+    //       authed: true,
+    //       loading: false,
+    //     })
 
-      } else {
-        this.setState({
-          authed: false,
-          loading: false
-        })
-      }
-    })
+    //   } else {
+    //     this.setState({
+    //       authed: false,
+    //       loading: false
+    //     })
+    //   }
+    // })
   }
 
   componentWillUnmount () {
@@ -77,11 +72,6 @@ class App extends Component {
         <BrowserRouter>
             <Switch>
                 <Route exact path="/" component={Home}></Route>
-                <PublicRoute authed={this.state.authed} path='/login' component={Login}/>
-                <PublicRoute authed={this.state.authed} path='/register' component={Register} />>
-                <Route path='/color' component={ColorChange}/>
-                <Route path='/card' component={Card}/>
-                <PrivateRoute authed={this.state.authed} path='/dashboard' component={Dashboard} />
             </Switch>
         </BrowserRouter>
     );
