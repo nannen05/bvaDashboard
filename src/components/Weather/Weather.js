@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { withRouter } from 'react-router-dom'
+import Slider from "react-slick";
 
 import './weather.css';
 
@@ -20,6 +21,15 @@ class Weather extends Component {
         cityForecastData: [],
         cityWeatherLoading: null,
         cityForecastLoading: null,
+        sliderSettings: {
+            dots: true,
+            arrows: false,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            fade: true
+        }
     };
   }
 
@@ -32,6 +42,13 @@ class Weather extends Component {
 
   kelvinToFahrenheit = (number) => {
       return (number - 273.15) * 9/5 + 32
+  }
+
+  dateStringToDate = (number) => {
+     let date = new Date(number)
+     let hours = date.getHours()
+     let mins = date.getMinutes()
+     return `${hours}:${mins}0`
   }
 
   fetchCurrentWeather = async (city) => {
@@ -59,7 +76,6 @@ class Weather extends Component {
         }
         const json = await response.json();
         this.setState({ cityForecastData: [...this.state.cityForecastData, json ] })
-        console.log(this.state.cityForecastData)
     } catch (error) {
         console.log(error);
     } finally {
@@ -81,22 +97,24 @@ class Weather extends Component {
                         {currentWeather.name}
                     </div>
                     <div className={`${ns}__title`}>
-                        {this.kelvinToFahrenheit(currentWeather.main.temp).toFixed()}
+                        {this.kelvinToFahrenheit(currentWeather.main.temp).toFixed()}<sup>&deg;</sup>
                     </div>
                 </div>
             </div>
             <div className={`${ns}__column`}>
                 <div className={`${ns}__table`}>
                     <div className={`${ns}__table--header`}>
-                        Time
+                        <span>Time</span>
                     </div>
                     {
-                        forecastWeather.list.slice(0,12).map((item, i) => {
+                        forecastWeather.list.slice(0,6).map((item, i) => {
                             return (
                                 <div className={`${ns}__table--row`} key={i}>
-                                    <div className={`${ns}__table--column`}>{forecastWeather.list[i].dt_txt}</div>
-                                    <div className={`${ns}__table--column`}>{forecastWeather.list[i].weather[0].icon}</div>
-                                    <div className={`${ns}__table--column`}>{this.kelvinToFahrenheit(forecastWeather.list[i].main.temp).toFixed()}</div>
+                                    <div className={`${ns}__table--column`}>{this.dateStringToDate(forecastWeather.list[i].dt_txt)}</div>
+                                    <div className={`${ns}__table--column`}>
+                                        <img src={`http://openweathermap.org/img/wn/${forecastWeather.list[i].weather[0].icon}@2x.png`}/>
+                                    </div>
+                                    <div className={`${ns}__table--column`}>{this.kelvinToFahrenheit(forecastWeather.list[i].main.temp).toFixed()}<sup>&deg;</sup>F</div>
                                 </div>
                             )
                         })
@@ -109,20 +127,23 @@ class Weather extends Component {
 
   render() {
     return (
-      <section className="weather">
+        <div>
             {
                 this.state.cityWeatherData.length === this.state.cities.length 
                 && this.state.cityForecastData.length === this.state.cities.length
                 && this.state.cityWeatherData != null
                 && this.state.cityForecastData != null
                 ? (
-                    this.state.cities.map((item, i) => {
-                        return this.buildWeatherCard(i, this.state.cityWeatherData[i], this.state.cityForecastData[i])
-                    })
+                    <Slider className="weather" {...this.state.sliderSettings}>
+                        {this.state.cities.map((item, i) => {
+                            return this.buildWeatherCard(i, this.state.cityWeatherData[i], this.state.cityForecastData[i])
+                        })}
+                    </Slider>
                 )
                 : 'Loading...'
+
             }
-      </section>
+        </div>
     );
   }
 }
